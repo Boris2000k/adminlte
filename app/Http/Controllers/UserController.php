@@ -119,13 +119,14 @@ class UserController extends Controller
         $user_permissions ="";
         $user = User::findOrFail($id);
 
+        
+
         // create permissions format for database
         foreach($request->except('_token','_method') as $perm)
         {
             $user_permissions = $user_permissions . $perm . ',';
         }
 
-        // dd($id);
          $user->permissions = $user_permissions;
          $user->save();
 

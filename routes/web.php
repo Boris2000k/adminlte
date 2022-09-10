@@ -26,3 +26,5 @@ Route::get('users/permissions','UserController@permissions')->name('users.permis
 Route::match(['put','path'],'users/permissions{user}','UserController@updatePermissions')->name('users.updatePermissions');
 
 Route::resource('/users','UserController');
+
+Route::resource('/data','DataController');

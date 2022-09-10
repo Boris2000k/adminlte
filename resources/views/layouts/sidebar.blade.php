@@ -19,7 +19,7 @@
             </ul>
           </li>
 
-        <li><a href="#"><i class="fa fa-cubes"></i> <span>Data Import</span></a></li>
+        <li><a href="{{ route('data.index') }}"><i class="fa fa-cubes"></i> <span>Data Import</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-line-chart"></i> <span>Imported Data</span>
             <span class="pull-right-container">
