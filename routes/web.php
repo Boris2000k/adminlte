@@ -21,4 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('users/permissions','UserController@permissions')->name('users.permissions');
+
+Route::match(['put','path'],'users/permissions{user}','UserController@updatePermissions')->name('users.updatePermissions');
+
 Route::resource('/users','UserController');

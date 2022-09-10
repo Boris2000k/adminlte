@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use League\Flysystem\Config;
+
+
 
 class UserController extends Controller
 {
@@ -13,8 +19,24 @@ class UserController extends Controller
      */
     public function index()
     {
+        // currently logged in user
         $user = auth()->user();
-        return view('users.index')->with('user',$user);
+        // all users
+        $users = User::all();
+        return view('users.index')->with('user',$user)->with('users',$users);
+    }
+
+    public function permissions()
+    {
+        
+        // get permissions from config
+         $perms = config('adminlte_config');
+
+        
+        
+        $user = auth()->user();
+        $users = DB::table('users')->simplePaginate(10);
+        return view('users.permissions')->with('users',$users)->with('user',$user)->with('perms',$perms);
     }
 
     /**
@@ -57,7 +79,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
@@ -69,7 +93,44 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate(
+            [
+            'username'=>'required|min:6|unique:users,username'
+            ],
+            [
+            'username.required' => 'Username cannot be empty',
+            'username.min' => 'Username must be atleast 6 characters long',
+            'username.unique' => 'This Username already exists',
+            ]
+        );
+
+        $user = User::findOrFail($id);
+
+        $user->username = $request->username;
+        $user->save();
+
+        return redirect()->route('users.index')->with("success", "$user->username was updated successfully");  
+    }
+
+    // update user permissions
+    public function updatePermissions(Request $request, $id)
+    {
+
+        $user_permissions ="";
+        $user = User::findOrFail($id);
+
+        // create permissions format for database
+        foreach($request->except('_token','_method') as $perm)
+        {
+            $user_permissions = $user_permissions . $perm . ',';
+        }
+
+        // dd($id);
+         $user->permissions = $user_permissions;
+         $user->save();
+
+         return redirect()->back()->with('success', 'Permissions updated successfully');  
+
     }
 
     /**
@@ -80,6 +141,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        if(Auth::id() == $id)
+        {
+            
+            return redirect()->route('users.index')->with("error", "You cannot delete your own profile");  
+            
+        }
+        else
+        {
+            $user -> delete();
+            return redirect()->route('users.index')->with("success", "$user->username was deleted successfully"); 
+        }
+          
     }
 }

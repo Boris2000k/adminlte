@@ -14,8 +14,8 @@
                 </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#">Users</a></li>
-              <li><a href="#">Permissions</a></li>
+              <li><a href="{{ route('users.index') }}">Users</a></li>
+              <li><a href="{{ route('users.permissions') }}">Permissions</a></li>
             </ul>
           </li>
 
