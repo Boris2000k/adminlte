@@ -61,6 +61,7 @@ for($i=0;$i<$keys_amount;$i++)
               <div class="col-sm-10">
 
                 <select id="importType" class="form-control select2" style="width: 100%;">
+                    <option value="">Select Import Type</option>
                     @for ($i=0;$i<sizeof($labels);$i+=3)
                     <option value="">{{ $labels[$i] }}</option>
                     @endfor
@@ -74,7 +75,8 @@ for($i=0;$i<$keys_amount;$i++)
               <label for="exampleInputFile" class="col-sm-2 control-label text-muted">DS Sheet</label>
               <div class="col-sm-10">
                 <input type="file" class="form-control" id="exampleInputFile">
-                <p id="headers" class="help-block">Example block-level help text here.</p>
+                {{-- required headers p --}}
+                <p id="headers" class="help-block"></p>
                 <button type="submit" class="btn btn-primary" style="margin-top:1vh;">Import</button>
               </div>
             </div>
@@ -86,19 +88,30 @@ for($i=0;$i<$keys_amount;$i++)
   
   <script>
 $( document ).ready(function() {
-    // convert php array into json for javascript
+  // convert php array into json for javascript
   var data = @json($data);
+  var user_permissions = @json($user->permissions);
+
+  // replace commas with space for easier reading
+  user_permissions = user_permissions.replace(',' , ' ');
+
+  
+  // console.log('includes permissions!');
 
   // fill import type dropdown
   for(i=0;i<data.length;i++)
   {
-    $("#importType").append($('<option>').text(data[i][0]).attr('value',i + '-' + data[i][1]));
+    if(user_permissions.includes(data[i][1]))
+    {
+      $("#importType").append($('<option>').text(data[i][0]).attr('value',i + '-' + data[i][1]));
+    }
+   
   }
 
   var headerData = "";
   // get headers data for first option
-  $.each(data[0][2], function(key, value) {
-  headerData+= key+','});
+  // $.each(data[0][2], function(key, value) {
+  // headerData+= key+','});
 
   // initialize headers data
   headerData = headerData.slice(0,-1);

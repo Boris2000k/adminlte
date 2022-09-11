@@ -30,10 +30,8 @@ class UserController extends Controller
     {
         
         // get permissions from config
-         $perms = config('adminlte_config');
+        $perms = config('adminlte_config');
 
-        
-        
         $user = auth()->user();
         $users = DB::table('users')->simplePaginate(10);
         return view('users.permissions')->with('users',$users)->with('user',$user)->with('perms',$perms);

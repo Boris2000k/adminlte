@@ -40,6 +40,22 @@ return[
             ],
         
         ],
+
+        // 'gifts' => [
+        //     "label"             => "Import Gifts",
+        //     "permission_required" => "import-gifts",
+        //     "files"             => [
+        //         "ds_sheet" => [
+        //             "label"     => "DS Sheet",
+        //             "headers_to_db" => [
+        //                 'Product name'            => 'product_name',
+        //                 'Message'            => 'message',
+        //                 'Delivery Address'            => 'delivery',
+        //             ],
+        //         ],
+        //     ],
+        
+        // ],
         
     ],
     ];
