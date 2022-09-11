@@ -7,6 +7,9 @@
 {{--  select necessary data  --}}
 
 <?php
+// delete
+
+// 
 $labels = array();
 $permission_names = array();
 foreach($config as $perm)
@@ -15,12 +18,16 @@ $keys_amount = sizeof($keys);
 // create arrays for config data
 for($i=0;$i<$keys_amount;$i++)
 {
+    // $headers[$i] = array();
     $data[$i] = array();
     array_push($data[$i],($perm[$keys[$i]]["label"]));
     array_push($data[$i],($perm[$keys[$i]]["permission_required"]));
     array_push($data[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
+    // array_push($headers[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
+    
 }
  
+
 
 ?>
 
@@ -54,11 +61,14 @@ for($i=0;$i<$keys_amount;$i++)
       
 
       <div class="box box-primary w-50">
-        <form class="form-horizontal">
+        <form class="form-horizontal" method="POST" action="{{ route('import') }}" enctype="multipart/form-data">
+          @csrf
           <div class="box-body">
             <div class="form-group">
               <label for="inputEmail3" class="col-sm-2 control-label text-muted">Import Type</label>
               <div class="col-sm-10">
+                
+                  
 
                 <select id="importType" class="form-control select2" style="width: 100%;">
                     <option value="">Select Import Type</option>
@@ -74,7 +84,7 @@ for($i=0;$i<$keys_amount;$i++)
             <div class="form-group">
               <label for="exampleInputFile" class="col-sm-2 control-label text-muted">DS Sheet</label>
               <div class="col-sm-10">
-                <input type="file" class="form-control" id="exampleInputFile">
+                <input type="file" name="file" class="form-control" id="exampleInputFile">
                 {{-- required headers p --}}
                 <p id="headers" class="help-block"></p>
                 <button type="submit" class="btn btn-primary" style="margin-top:1vh;">Import</button>

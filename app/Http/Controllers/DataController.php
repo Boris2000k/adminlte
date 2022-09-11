@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\OrdersImport;
 use Illuminate\Http\Request;
 use App\User;
+use Excel;
+use orders;
 
 class DataController extends Controller
 {
@@ -21,6 +24,12 @@ class DataController extends Controller
         // all users
         $users = User::all();
         return view('data.index')->with('user',$user)->with('users',$users)->with('config',$config);
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new OrdersImport, $request->file);
+        return redirect()->route('data.index')->with("success", "Data imported successfully");  
     }
 
     /**
@@ -88,4 +97,6 @@ class DataController extends Controller
     {
         //
     }
+
+    
 }

@@ -14,7 +14,7 @@ return[
                         'SKU'              => 'sku',
                         'Item Description' => 'item_description',
                         'Origin'           => 'origin',
-                        'SO#'              => 'so_num',
+                        'SO'              => 'so_num',
                         'Total Price'      => 'total_price',
                         'Cost'             => 'cost',
                         'Shipping Cost'    => 'shipping_cost',

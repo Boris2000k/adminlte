@@ -19,6 +19,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('data/index','DataController@import')->name('import');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('users/permissions','UserController@permissions')->name('users.permissions');
@@ -28,3 +30,5 @@ Route::match(['put','path'],'users/permissions{user}','UserController@updatePerm
 Route::resource('/users','UserController');
 
 Route::resource('/data','DataController');
+
+
