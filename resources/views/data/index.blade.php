@@ -87,9 +87,10 @@ for($i=0;$i<$keys_amount;$i++)
                     @for ($i=0;$i<sizeof($labels);$i+=3)
                     <option value="">{{ $labels[$i] }}</option>
                     @endfor
-                    
-                  
                 </select>
+
+                {{-- send headers to import --}}
+                <input id="headers_input" name="headers_input" type="text" hidden style="width:100%;">
 
               </div>
             </div>
@@ -112,7 +113,10 @@ for($i=0;$i<$keys_amount;$i++)
 $( document ).ready(function() {
   // convert php array into json for javascript
   var data = @json($data);
+  
   var user_permissions = @json($auth_user->permissions);
+
+  var validation_data = [];
 
   // replace commas with space for easier reading
   user_permissions = user_permissions.replace(',' , ' ');
@@ -145,14 +149,30 @@ $( document ).ready(function() {
     headerData = '';
     // get data index from value
     var dataIndex = $("#importType").val().split('-')[0];
+    
+    $("#headers_input").val($("#importType").val().split('-')[1]+'-'+$("#importType").val().split('-')[2]);
+    
+    
+    
     // select headers
     $.each(data[dataIndex][2], function(key, value) {
-    headerData+= key+','});
+    
+    headerData+= value+','});
     // cut comma from last header
     headerData = headerData.slice(0,-1);
     // set the headers text
     $("#headers").text('Required Headers: ' + headerData);
+    var headers_input = $("#importType").val().split('-')[1]+'-'+$("#importType").val().split('-')[2] + ' ' + headerData;
+    headers_input = headers_input.replaceAll(',',' ');
+    $("#headers_input").val(headers_input);
+    // pass js array to php
+    
+
+    
+
+    
   });
+  
 });
 
   </script>

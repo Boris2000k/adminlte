@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\OrdersImport;
+use Maatwebsite\Excel\HeadingRowImport;
 use Illuminate\Http\Request;
 use App\User;
 use Excel;
@@ -28,12 +29,24 @@ class DataController extends Controller
 
     public function import(Request $request)
     {
+        // check mime type
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xlsx'
+        ]);
+
+        $data_array = explode(' ',$request->headers_input);
         
-            Excel::import(new OrdersImport, $request->file);
-            return redirect()->route('data.index')->with("success", "Data imported successfully"); 
-    
-        // dd($request->file["order_date"]);
-          
+        // double check user permission
+        $permission_required = $data_array[0];
+
+        
+
+        $path = $request->file('file')->getRealPath();
+
+        Excel::import(new OrdersImport, $path);
+        return redirect()->route('data.index')->with("success", "Data imported successfully"); 
+           
+        
     }
 
     /**

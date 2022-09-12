@@ -7,7 +7,12 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Dotenv\Exception\ValidationException;
-use Carbon\Carbon;
+
+
+
+
+
+
 
 
 
@@ -19,6 +24,8 @@ class OrdersImport implements ToModel,WithHeadingRow, WithValidation
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
+    
   
     public function model(array $row)
     {
@@ -36,6 +43,7 @@ class OrdersImport implements ToModel,WithHeadingRow, WithValidation
         ]);
     }
 
+    
     public function rules():array
     {
         return [
@@ -55,17 +63,17 @@ class OrdersImport implements ToModel,WithHeadingRow, WithValidation
     public function customValidationMessages()
     {
         return [
-            'order_date.required' => 'Header: Order Date is required',
-            'channel.required' => 'Header: Channel is required',
-            'sku.required' => 'Header: SKU is required',
-            'sku.unique' => 'Header: SKU must be unique',
-            'item_description.required' => 'Header: Item Description is required',
-            'origin.required' => 'Header: Origin is required',
-            'so_num.required' => 'Header: SO# is required',
-            'total_price.required' => 'Header: Total Price is required',
-            'cost.required' => 'Header: Cost is required',
-            'shipping_cost.required' => 'Header: Shipping Cost is required',
-            'profit.required' => 'Header: Profit is required',
+            'order_date.required' => 'Header: order_date is required',
+            'channel.required' => 'Header: channel is required',
+            'sku.required' => 'Header: sku is required',
+            'sku.unique' => 'Header: sku must be unique',
+            'item_description.required' => 'Header: item_description is required',
+            'origin.required' => 'Header: origin is required',
+            'so_num.required' => 'Header: so_num is required',
+            'total_price.required' => 'Header: total_price is required',
+            'cost.required' => 'Header: cost is required',
+            'shipping_cost.required' => 'Header: shipping_cost is required',
+            'profit.required' => 'Header: profit is required',
         ];
     }
 
