@@ -44,13 +44,25 @@ for($i=0;$i<$keys_amount;$i++)
                   <li>{!! \Session::get('success') !!}</li>
               </ul>
           </div>
-      @elseif (Session::has('error'))
-          <div class="alert alert-danger">
-            <ul>
-                <li>{!! \Session::get('error') !!}</li>
-            </ul>
-          </div>
+
       @endif
+
+      @if(count($errors->getMessages()) > 0)
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>Validation Errors:</strong>
+            <ul>
+                @foreach($errors->getMessages() as $errorMessages)
+                    @foreach($errorMessages as $errorMessage)
+                        <li>
+                            {{ $errorMessage }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </li>
+                    @endforeach
+                @endforeach
+            </ul>
+        </div>
+      @endif
+
     </section>
 
     <!-- Main content -->
@@ -100,7 +112,7 @@ for($i=0;$i<$keys_amount;$i++)
 $( document ).ready(function() {
   // convert php array into json for javascript
   var data = @json($data);
-  var user_permissions = @json($user->permissions);
+  var user_permissions = @json($auth_user->permissions);
 
   // replace commas with space for easier reading
   user_permissions = user_permissions.replace(',' , ' ');

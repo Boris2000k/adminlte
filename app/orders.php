@@ -14,5 +14,5 @@ class orders extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['order_date','channel','sku','item_description','origin','so','total_price','cost','shipping_cost','profit'];
+    protected $fillable = ['order_date','channel','sku','item_description','origin','so_num','total_price','cost','shipping_cost','profit'];
 }

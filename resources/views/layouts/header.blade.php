@@ -35,7 +35,7 @@
               <!-- The user image in the navbar-->
               <i class="fas fa-user-circle fa-xl"></i>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{ $user->username }}</span>
+              <span class="hidden-xs">{{ $auth_user->username }}</span>
             </a>
             <ul class="dropdown-menu">
               

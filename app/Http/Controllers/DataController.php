@@ -20,16 +20,20 @@ class DataController extends Controller
 
         $config = config('adminlte_config');
         // currently logged in user
-        $user = auth()->user();
+        $auth_user = auth()->user();
         // all users
         $users = User::all();
-        return view('data.index')->with('user',$user)->with('users',$users)->with('config',$config);
+        return view('data.index')->with('auth_user',$auth_user)->with('users',$users)->with('config',$config);
     }
 
     public function import(Request $request)
     {
-        Excel::import(new OrdersImport, $request->file);
-        return redirect()->route('data.index')->with("success", "Data imported successfully");  
+        
+            Excel::import(new OrdersImport, $request->file);
+            return redirect()->route('data.index')->with("success", "Data imported successfully"); 
+    
+        // dd($request->file["order_date"]);
+          
     }
 
     /**

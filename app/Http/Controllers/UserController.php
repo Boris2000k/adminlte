@@ -20,10 +20,10 @@ class UserController extends Controller
     public function index()
     {
         // currently logged in user
-        $user = auth()->user();
+        $auth_user = auth()->user();
         // all users
         $users = User::all();
-        return view('users.index')->with('user',$user)->with('users',$users);
+        return view('users.index')->with('auth_user',$auth_user)->with('users',$users);
     }
 
     public function permissions()
@@ -32,9 +32,9 @@ class UserController extends Controller
         // get permissions from config
         $perms = config('adminlte_config');
 
-        $user = auth()->user();
+        $auth_user = auth()->user();
         $users = DB::table('users')->simplePaginate(10);
-        return view('users.permissions')->with('users',$users)->with('user',$user)->with('perms',$perms);
+        return view('users.permissions')->with('users',$users)->with('auth_user',$auth_user)->with('perms',$perms);
     }
 
     /**
@@ -77,9 +77,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        $auth_user = auth()->user();
         $user = User::findOrFail($id);
 
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', ['user' => $user])->with('auth_user',$auth_user);
     }
 
     /**
