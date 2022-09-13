@@ -9,23 +9,14 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Dotenv\Exception\ValidationException;
 
 
-
-
-
-
-
-
-
-
-class OrdersImport implements ToModel,WithHeadingRow, WithValidation
+class Order implements ToModel,WithHeadingRow, WithValidation
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-
-    
+   
   
     public function model(array $row)
     {
@@ -80,9 +71,6 @@ class OrdersImport implements ToModel,WithHeadingRow, WithValidation
     public function onFailure(Failure ...$failures)
     {
     $exception = ValidationException::withMessages(collect($failures)->map->toArray()->all());
-
     throw $exception;
     }
-
-    
 }

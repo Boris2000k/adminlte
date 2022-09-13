@@ -48,7 +48,7 @@
                     <th>Username</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-                    <th>Actions</th>
+                    <th class="dnr">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                 <td>{{ $user->username }}</td>
                 <td>{{ $user->created_at }}</td>
                 <td>{{ $user->updated_at }}</td>
-                <td>
+                <td class="dnr">
                   <a class="btn btn-primary" href="{{ route('users.edit', ['user' => $user->id]) }}">Edit</a>
                   <a>
                   <form style="display:inline;" method="POST" class="fm-inline" action="{{ route('users.destroy', ['user' => $user->id]) }}">
@@ -79,7 +79,7 @@
                   <th>Username</th>
                   <th>Created At</th>
                   <th>Updated At</th>
-                  <th>Actions</th>
+                  <th class="dnr">Actions</th>
                 </tr>
             </tfoot>
         </table>
@@ -103,7 +103,13 @@
       dom: 'Bfrtip',
         buttons:
           [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            {
+              extend: 'excelHtml5',
+              exportOptions: {
+              columns: ":not(.dnr)"
+              }
+            }
+            
           ]
     });
   });

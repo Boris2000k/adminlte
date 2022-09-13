@@ -26,9 +26,6 @@ for($i=0;$i<$keys_amount;$i++)
     // array_push($headers[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
     
 }
- 
-
-
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -42,6 +39,15 @@ for($i=0;$i<$keys_amount;$i++)
           <div class="alert alert-success">
               <ul>
                   <li>{!! \Session::get('success') !!}</li>
+              </ul>
+          </div>
+
+      @endif
+
+      @if (Session::has('error'))
+          <div class="alert alert-danger">
+              <ul>
+                  <li>{!! \Session::get('error') !!}</li>
               </ul>
           </div>
 
@@ -91,6 +97,7 @@ for($i=0;$i<$keys_amount;$i++)
 
                 {{-- send headers to import --}}
                 <input id="headers_input" name="headers_input" type="text" hidden style="width:100%;">
+                <input id="import_type" name="import_type" type="text" hidden style="width:100%;">
 
               </div>
             </div>
@@ -151,6 +158,11 @@ $( document ).ready(function() {
     var dataIndex = $("#importType").val().split('-')[0];
     
     $("#headers_input").val($("#importType").val().split('-')[1]+'-'+$("#importType").val().split('-')[2]);
+
+    var import_type = $("#importType").val().split('-')[2];
+    import_type = import_type.slice(0,-1)
+    import_type = import_type.charAt(0).toUpperCase() + import_type.slice(1);
+    $("#import_type").val(import_type);
     
     
     
