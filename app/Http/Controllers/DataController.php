@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
-
+use Rap2hpoutre\FastExcel\FastExcel;
+use App\orders;
 use App\Imports\Order;
 use App\Imports\Refund;
-use Maatwebsite\Excel\HeadingRowImport;
 use Illuminate\Http\Request;
 use App\User;
-use Excel;
-use orders;
+use \Exception;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
+
 use refunds;
+use Throwable;
 
 class DataController extends Controller
 {
@@ -36,47 +38,76 @@ class DataController extends Controller
 
     public function import(Request $request)
     {
-        // check mime type
-        $this->validate($request, [
-            'file' => 'required|mimes:csv,xlsx'
-        ]);
 
-        // data backend permission check will use
-        $data_array = explode(' ',$request->headers_input);
-        $user_perm_array = array();
-        $permission_required = $data_array[0];
-        $user_perm = auth()->user()->permissions;
-
-        // Call this import for headers check
-        $import_type = $data_array[0];
-        $import_type = explode('-',$import_type);
-        $import_type = ucfirst(substr($import_type[1], 0,-1));
-        
-        $user_perm = str_replace(","," ",$user_perm);
-        // backend check if user has permission for this import
-        if(!str_contains($user_perm,$permission_required))
-        {
-            return redirect()->route('data.index')->with("error", "You don't have permission for this import type");
-        }
-
-        // path to file
         $path = $request->file('file')->getRealPath();
 
-        // dynamic class names straight up refuse to work,temp fix
-        // Excel::import(new $import_type, $path); <- not working 
-        // Call appropriate import class
-        if($import_type == 'Order')
+        (new FastExcel)->import($path, function ($line) {
+        $config = config('adminlte_config');
+        foreach($config as $perm)
+        $keys = array_keys($perm);
+        $keys_amount = sizeof($keys);
+        // create arrays for config data
+        for($i=0;$i<$keys_amount;$i++)
         {
-        Excel::import(new Order, $path);
-        return redirect()->route('data.index')->with("success", "Data imported successfully"); 
+            // $headers[$i] = array();
+            $data[$i] = array();
+            array_push($data[$i],($perm[$keys[$i]]["label"]));
+            array_push($data[$i],($perm[$keys[$i]]["permission_required"]));
+            array_push($data[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
         }
 
-        else if($import_type == 'Refund')
-        {
-            Excel::import(new Refund, $path);
-            return redirect()->route('data.index')->with("success", "Data imported successfully"); 
-        }
+            $order = new orders();
+            $headers = $data[0][2];
+            foreach($headers as $key=>$value)
+            {
+                try
+                {
+                    $order->$value = $line[$key];
+                    
+                }
+                catch (PDOException $e) {
+                    dd($e);
+                    }  
+                catch(\Exception $e)
+                {
+                  dd($e);
+                  throw ValidationException::withMessages(['error' => 'Header Validation Error']);
+                     
+                }
+                catch(\Illuminate\Database\QueryException $e)
+                {
+                    dd($e);
+                    throw QueryException::withMessages(['error' => 'Query Error']);
+                }
+                 
+                
+                
+            }
+
+            $order->save();
+      
+            });
+            return redirect()->back()->with('success', 'Orders imported successfully'); 
     }
+        
+
+        
+ 
+   
+
+        // check mime type
+        // $this->validate($request, [
+        //     'file' => 'required|mimes:csv,xlsx'
+        // ]);
+
+        
+        
+     
+        
+        
+
+       
+    
 
     /**
      * Show the form for creating a new resource.

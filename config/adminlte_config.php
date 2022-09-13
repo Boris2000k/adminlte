@@ -9,12 +9,12 @@ return[
                 "ds_sheet" => [
                     "label"   => "DS Sheet",
                     "headers_to_db" => [
-                        'Order Date'       => 'order_date',
+                        '​Order Date'       => 'order_date',
                         'Channel'          => 'channel',
                         'SKU'              => 'sku',
                         'Item Description' => 'item_description',
                         'Origin'           => 'origin',
-                        'SO'              => 'so_num',
+                        'SO#'              => 'so_num',
                         'Total Price'      => 'total_price',
                         'Cost'             => 'cost',
                         'Shipping Cost'    => 'shipping_cost',

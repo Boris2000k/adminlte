@@ -26,6 +26,10 @@ for($i=0;$i<$keys_amount;$i++)
     // array_push($headers[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
     
 }
+// foreach($data[0][2] as $xd => $value)
+// {
+//   dump($xd . $value);
+// }
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -124,6 +128,8 @@ $( document ).ready(function() {
   var user_permissions = @json($auth_user->permissions);
 
   var validation_data = [];
+
+  
 
   // replace commas with space for easier reading
   user_permissions = user_permissions.replace(',' , ' ');
