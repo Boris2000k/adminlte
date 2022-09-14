@@ -24,6 +24,8 @@ for($i=0;$i<$keys_amount;$i++)
     // array_push($headers[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
     
 }
+
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -66,6 +68,8 @@ for($i=0;$i<$keys_amount;$i++)
             </ul>
         </div>
       @endif
+
+      
 
     </section>
 

@@ -36,8 +36,6 @@ class DataController extends Controller
 
     public function import(Request $request)
     {
-
-
          // check mime type
          $this->validate($request, [
             'file' => 'required|mimes:csv,xlsx'
@@ -141,13 +139,15 @@ class DataController extends Controller
      */
     public function show($table_name)
     {
+        
+        $data_key = request()->key;
         $model = 'App\\' . $table_name;
         $db_data = $model::all();
         
             
         
         $auth_user = auth()->user();
-        return view('data.show')->with('auth_user',$auth_user)->with('db_data',$db_data);;
+        return view('data.show')->with('auth_user',$auth_user)->with('db_data',$db_data)->with('data_key',$data_key);
     }
 
     /**

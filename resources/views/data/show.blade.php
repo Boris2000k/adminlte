@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+  .dataTables_filter{
+   float: left !important;
+   padding-left:10px;
+}
+
+div.dt-buttons {
+  float: left !important;
+}
+</style>
 
 <?php
 $perms = config('adminlte_config');
@@ -20,6 +30,8 @@ for($i=0;$i<$keys_amount;$i++)
     array_push($permission_labels,($perm[$keys[$i]]["label"]));
     array_push($permission_names,($perm[$keys[$i]]["permission_required"]));
 }
+// get table header data
+$headers = $data[$data_key][2];
 ?>
 
 
@@ -32,7 +44,7 @@ for($i=0;$i<$keys_amount;$i++)
       <small>Optional description</small>
     </h1>
   </section>
-
+ 
   <!-- Main content -->
   <section class="content container-fluid">
 
@@ -47,26 +59,32 @@ for($i=0;$i<$keys_amount;$i++)
     <table id="usersTable" class="display" style="width:100%">
       <thead>
           <tr>
-              <th>ID</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th class="dnr">Actions</th>
+           
+            @foreach ($headers as $key => $value)
+            <th>{{ $key }}</th>
+            @endforeach
+              
+      
+              <th class="dnr">Delete</th>
           </tr>
       </thead>
       <tbody>
           @forelse ($db_data as $data_table)
           <tr>
-          <td>{{ $data_table->order_num }}</td>
+            @foreach ($headers as $key => $value)
+            <td>{{ $data_table->$value }}</td>
+            @endforeach
+          {{--  <td>{{ $data_table->order_num }}</td>
           <td>{{ $data_table->reason }}</td>
-          <td>{{ $data_table->status }}</td>
+          <td>{{ $data_table->status }}</td>  --}}
           
           <td class="dnr">
-            <a class="btn btn-primary" href="">Edit</a>
-            <a>
             <form style="display:inline;" method="POST" class="fm-inline" action="">
               @csrf
               @method('DELETE')
-              <input type="submit" value="Delete" class="btn btn-danger"/>
+              <button type="submit" style="background-color: transparent;background-repeat: no-repeat;border: none;cursor: pointer;overflow: hidden;outline: none;">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
             </form>
           </a>
           </td>
@@ -77,17 +95,17 @@ for($i=0;$i<$keys_amount;$i++)
       </tbody>
       <tfoot>
           <tr>
-            <th>ID</th>
-            <th>Reason</th>
-            <th>Status</th>
-            <th class="dnr">Actions</th>
+            @foreach ($headers as $key => $value)
+            <th>{{ $key }}</th>
+            @endforeach
+            <th class="dnr">Delete</th>
           </tr>
       </tfoot>
   </table>
   </div>
   <!-- /.box-body -->
 </div>
-<a class="btn btn-success btn-lg" href="">Create new user</a>
+
 
 
 </section>
@@ -98,12 +116,6 @@ for($i=0;$i<$keys_amount;$i++)
     
 
 
-
-  </section>
-  <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-
 <script>
   $(document).ready(function () {
     $.noConflict();
@@ -112,6 +124,7 @@ for($i=0;$i<$keys_amount;$i++)
         buttons:
           [
             {
+              className: 'btn btn-primary',
               extend: 'excelHtml5',
               exportOptions: {
               columns: ":not(.dnr)"

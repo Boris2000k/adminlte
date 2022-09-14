@@ -30,7 +30,7 @@
           @extends('helpers.config_helper');
           <ul class="treeview-menu">
             @for($i=0;$i<$keys_amount;$i++)
-              <li><a href="{{ route('data.show',['data' => $keys[$i]]) }}">{{ $data[$i][0] }}</a></li>  
+              <li><a href="{{ route('data.show',['data' => $keys[$i],'key' => $i]) }}">{{ $data[$i][0] }}</a></li>  
             
             @endfor
           </ul>
