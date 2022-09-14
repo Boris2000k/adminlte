@@ -44,13 +44,12 @@
   {{-- fontawesone --}}
   <script src="https://kit.fontawesome.com/affc452592.js" crossorigin="anonymous"></script>
 
-  
-  
+
     
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     
-
+        {{--  @include('helpers.config_helper');  --}}
         @include('layouts.header')
         @include('layouts.sidebar')
 

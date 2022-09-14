@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\orders;
+use App\refunds;
 use App\Imports\Order;
 use App\Imports\Refund;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use \Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
-use refunds;
+
 use Throwable;
 
 class DataController extends Controller
@@ -21,9 +22,6 @@ class DataController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
-
 
     public function index()
     {
@@ -39,30 +37,57 @@ class DataController extends Controller
     public function import(Request $request)
     {
 
+
+         // check mime type
+         $this->validate($request, [
+            'file' => 'required|mimes:csv,xlsx'
+        ]);
+
+        // very bad approach, change later
+        // pass data to import function
+        global $import_type;
+        global $data_index;
+        
+        // class name
+        $import_type = $request->import_type;
+        // data index for array
+        $data_index = $request->data_index;
+        $data_index = explode('-',$data_index);
+        $data_index = $data_index[0];
+        // dd($data_index);
+        
         $path = $request->file('file')->getRealPath();
 
-        (new FastExcel)->import($path, function ($line) {
+        (new FastExcel)->import($path, function ($line){
+
+        // pass globals to import function
+        global $import_type,$data_index;
+        
+        // get config file to compare with posted data
         $config = config('adminlte_config');
         foreach($config as $perm)
+        {
+        // read array
         $keys = array_keys($perm);
         $keys_amount = sizeof($keys);
         // create arrays for config data
         for($i=0;$i<$keys_amount;$i++)
         {
-            // $headers[$i] = array();
             $data[$i] = array();
             array_push($data[$i],($perm[$keys[$i]]["label"]));
             array_push($data[$i],($perm[$keys[$i]]["permission_required"]));
             array_push($data[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
         }
-
-            $order = new orders();
-            $headers = $data[0][2];
+    }
+            // create dynamic class name
+            $import = '\\App\\'  . $import_type;
+            $varobj = new $import();
+            $headers = $data[$data_index][2];
             foreach($headers as $key=>$value)
             {
                 try
                 {
-                    $order->$value = $line[$key];
+                    $varobj->$value = $line[$key];
                     
                 }
                 catch (PDOException $e) {
@@ -70,8 +95,8 @@ class DataController extends Controller
                     }  
                 catch(\Exception $e)
                 {
-                  dd($e);
-                  throw ValidationException::withMessages(['error' => 'Header Validation Error']);
+                //   dd($e);
+                  throw ValidationException::withMessages(['error' => 'Header Validation Error at: ' . $key ]);
                      
                 }
                 catch(\Illuminate\Database\QueryException $e)
@@ -79,35 +104,13 @@ class DataController extends Controller
                     dd($e);
                     throw QueryException::withMessages(['error' => 'Query Error']);
                 }
-                 
-                
-                
             }
 
-            $order->save();
+            $varobj->save();
       
             });
             return redirect()->back()->with('success', 'Orders imported successfully'); 
     }
-        
-
-        
- 
-   
-
-        // check mime type
-        // $this->validate($request, [
-        //     'file' => 'required|mimes:csv,xlsx'
-        // ]);
-
-        
-        
-     
-        
-        
-
-       
-    
 
     /**
      * Show the form for creating a new resource.
@@ -136,9 +139,15 @@ class DataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($table_name)
     {
-        //
+        $model = 'App\\' . $table_name;
+        $db_data = $model::all();
+        
+            
+        
+        $auth_user = auth()->user();
+        return view('data.show')->with('auth_user',$auth_user)->with('db_data',$db_data);;
     }
 
     /**

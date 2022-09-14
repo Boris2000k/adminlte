@@ -7,9 +7,7 @@
 {{--  select necessary data  --}}
 
 <?php
-// delete
 
-// 
 $labels = array();
 $permission_names = array();
 foreach($config as $perm)
@@ -26,10 +24,6 @@ for($i=0;$i<$keys_amount;$i++)
     // array_push($headers[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
     
 }
-// foreach($data[0][2] as $xd => $value)
-// {
-//   dump($xd . $value);
-// }
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -92,16 +86,16 @@ for($i=0;$i<$keys_amount;$i++)
                 
                   
 
-                <select id="importType" class="form-control select2" style="width: 100%;">
+                <select name="data_index" id="importType" class="form-control select2" style="width: 100%;">
                     <option value="">Select Import Type</option>
                     @for ($i=0;$i<sizeof($labels);$i+=3)
                     <option value="">{{ $labels[$i] }}</option>
                     @endfor
                 </select>
-
+                
                 {{-- send headers to import --}}
                 <input id="headers_input" name="headers_input" type="text" hidden style="width:100%;">
-                <input id="import_type" name="import_type" type="text" hidden style="width:100%;">
+                <input id="import_type" name="import_type" type="text" hidden  style="width:100%;">
 
               </div>
             </div>
@@ -166,8 +160,7 @@ $( document ).ready(function() {
     $("#headers_input").val($("#importType").val().split('-')[1]+'-'+$("#importType").val().split('-')[2]);
 
     var import_type = $("#importType").val().split('-')[2];
-    import_type = import_type.slice(0,-1)
-    import_type = import_type.charAt(0).toUpperCase() + import_type.slice(1);
+    
     $("#import_type").val(import_type);
     
     

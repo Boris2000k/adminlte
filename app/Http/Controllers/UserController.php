@@ -12,6 +12,10 @@ use League\Flysystem\Config;
 
 class UserController extends Controller
 {
+    public function __construct() 
+    {
+        
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,6 +23,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        
         // currently logged in user
         $auth_user = auth()->user();
         // all users

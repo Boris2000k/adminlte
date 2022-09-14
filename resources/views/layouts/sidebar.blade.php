@@ -1,3 +1,4 @@
+
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
 
@@ -26,9 +27,12 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
+          @extends('helpers.config_helper');
           <ul class="treeview-menu">
-            <li><a href="#">Link in level 2</a></li>
-            <li><a href="#">Link in level 2</a></li>
+            @for($i=0;$i<$keys_amount;$i++)
+              <li><a href="{{ route('data.show',['data' => $keys[$i]]) }}">{{ $data[$i][0] }}</a></li>  
+            
+            @endfor
           </ul>
         </li>
       </ul>

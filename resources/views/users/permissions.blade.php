@@ -13,6 +13,12 @@ $keys = array_keys($perm);
 $keys_amount = sizeof($keys);
 for($i=0;$i<$keys_amount;$i++)
 {
+    // data for sidebar
+    $data[$i] = array();
+    array_push($data[$i],($perm[$keys[$i]]["label"]));
+    array_push($data[$i],($perm[$keys[$i]]["permission_required"]));
+    array_push($data[$i],($perm[$keys[$i]]["files"]["ds_sheet"]["headers_to_db"]));
+
     array_push($permission_labels,($perm[$keys[$i]]["label"]));
     array_push($permission_names,($perm[$keys[$i]]["permission_required"]));
 }
