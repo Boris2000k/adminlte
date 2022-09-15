@@ -11,6 +11,8 @@ use App\User;
 use \Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
 use Throwable;
@@ -139,6 +141,7 @@ class DataController extends Controller
      */
     public function show($table_name)
     {
+        $user_perms = Auth::user()->permissions;
         
         $data_key = request()->key;
         $model = 'App\\' . $table_name;
@@ -147,7 +150,7 @@ class DataController extends Controller
             
         
         $auth_user = auth()->user();
-        return view('data.show')->with('auth_user',$auth_user)->with('db_data',$db_data)->with('data_key',$data_key);
+        return view('data.show')->with('auth_user',$auth_user)->with('db_data',$db_data)->with('data_key',$data_key)->with('user_perms',$user_perms);
     }
 
     /**

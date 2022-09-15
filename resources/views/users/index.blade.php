@@ -2,6 +2,16 @@
 
 @section('content')
 
+{{-- moves the search function to the left --}}
+<style>
+  .dataTables_filter{
+   float: right !important;
+   padding-right:10px;
+   display:inline;
+}
+
+</style>
+
 <?php
 $perms = config('adminlte_config');
 $permission_labels = array();
@@ -55,7 +65,7 @@ for($i=0;$i<$keys_amount;$i++)
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <table id="usersTable" class="display" style="width:100%">
+          <table id="usersTable" style="width:100%">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -100,9 +110,6 @@ for($i=0;$i<$keys_amount;$i++)
         </div>
         <!-- /.box-body -->
       </div>
-      <a class="btn btn-success btn-lg" href="">Create new user</a>
-
-
     </section>
     <!-- /.content -->
   </div>
@@ -114,17 +121,16 @@ for($i=0;$i<$keys_amount;$i++)
   $(document).ready(function () {
     $.noConflict();
     $('#usersTable').DataTable( {
-      dom: 'Bfrtip',
-        buttons:
-          [
-            {
-              extend: 'excelHtml5',
-              exportOptions: {
-              columns: ":not(.dnr)"
-              }
-            }
-            
-          ]
+      dom: 'fBrtip',
+      buttons: [
+    {
+      text: 'Add New User',
+      className: 'btn btn-success',
+      action: function ( e, dt, button, config ) {
+        window.location = '{{ route('register') }}';
+      }        
+    }
+]
     });
   });
 

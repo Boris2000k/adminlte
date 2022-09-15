@@ -4,11 +4,16 @@
 <style>
   .dataTables_filter{
    float: left !important;
-   padding-left:10px;
+   padding-right:10px;
 }
 
 div.dt-buttons {
   float: left !important;
+}
+
+.dataTables_length
+{
+  float:right !important;
 }
 </style>
 
@@ -32,6 +37,7 @@ for($i=0;$i<$keys_amount;$i++)
 }
 // get table header data
 $headers = $data[$data_key][2];
+
 ?>
 
 
@@ -41,7 +47,7 @@ $headers = $data[$data_key][2];
   <section class="content-header">
     <h1>
       Page Header
-      <small>Optional description</small>
+      <small>Delete or Export Data</small>
     </h1>
   </section>
  
@@ -52,7 +58,7 @@ $headers = $data[$data_key][2];
  {{-- page content --}}
  <div class="box">
   <div class="box-header">
-    <h3 class="box-title">Data Table With Full Features</h3>
+  
   </div>
   <!-- /.box-header -->
   <div class="box-body">
@@ -63,32 +69,31 @@ $headers = $data[$data_key][2];
             @foreach ($headers as $key => $value)
             <th>{{ $key }}</th>
             @endforeach
-              
-      
+            
+            @if(Str::contains($user_perms,$permission_names[$data_key]))
               <th class="dnr">Delete</th>
+            @endif
           </tr>
       </thead>
       <tbody>
           @forelse ($db_data as $data_table)
-          <tr>
-            @foreach ($headers as $key => $value)
-            <td>{{ $data_table->$value }}</td>
-            @endforeach
-          {{--  <td>{{ $data_table->order_num }}</td>
-          <td>{{ $data_table->reason }}</td>
-          <td>{{ $data_table->status }}</td>  --}}
+            <tr>
+              @foreach ($headers as $key => $value)
+              <td>{{ $data_table->$value }}</td>
+              @endforeach
           
-          <td class="dnr">
-            <form style="display:inline;" method="POST" class="fm-inline" action="">
-              @csrf
-              @method('DELETE')
-              <button type="submit" style="background-color: transparent;background-repeat: no-repeat;border: none;cursor: pointer;overflow: hidden;outline: none;">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            </form>
-          </a>
-          </td>
-          </tr>
+              @if(Str::contains($user_perms,$permission_names[$data_key]))
+                <td class="dnr">
+                  <form style="display:inline;" method="POST" class="fm-inline" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this row ?')" style="background-color: transparent;background-repeat: no-repeat;border: none;cursor: pointer;overflow: hidden;outline: none;">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </form>
+                </td>
+              @endif
+            </tr>
           @empty
             
           @endforelse
@@ -98,7 +103,11 @@ $headers = $data[$data_key][2];
             @foreach ($headers as $key => $value)
             <th>{{ $key }}</th>
             @endforeach
-            <th class="dnr">Delete</th>
+
+            @if(Str::contains($user_perms,$permission_names[$data_key]))
+              <th class="dnr">Delete</th>
+            @endif
+
           </tr>
       </tfoot>
   </table>
@@ -115,17 +124,18 @@ $headers = $data[$data_key][2];
 <!-- DataTables -->
     
 
-
+{{-- initiate datatable + don't export delete row --}}
 <script>
   $(document).ready(function () {
     $.noConflict();
-    $('#usersTable').DataTable( {
-      dom: 'Bfrtip',
+    var table = $('#usersTable').DataTable( {
+      dom: 'fBlrtip',
         buttons:
           [
             {
               className: 'btn btn-primary',
               extend: 'excelHtml5',
+              text: 'Export',
               exportOptions: {
               columns: ":not(.dnr)"
               }
@@ -133,7 +143,18 @@ $headers = $data[$data_key][2];
             
           ]
     });
+    $('#usersTable tbody').on( 'click', 'tr', function () {
+    var d = "";
+    d = table.row( this ).data();
+    d.pop();
+    console.log(d);
+} );
+
+$.fn.dataTable.ext.errMode = 'none';
   });
+
+ 
+
 
   </script>
   
