@@ -25,6 +25,11 @@ class DataController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
 
@@ -182,9 +187,20 @@ class DataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+   
+            $id = $request->data;
+            $model_name = $request->model;
+            
+            // create dynamic model class
+            $model = 'App\\' . $model_name;
+            $db_data = $model::findOrFail($id);
+            
+            $db_data -> delete();
+            return redirect()->back()->with("success", "Row Deleted Successfully");  
+            
+        
     }
 
     

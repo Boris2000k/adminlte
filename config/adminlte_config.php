@@ -26,36 +26,36 @@ return[
         ],
         
             'refunds' => [
-            "label"             => "Import Refunds",
-            "permission_required" => "import-refunds",
+                "label"             => "Import Refunds",
+                "permission_required" => "import-refunds",
+                "files"             => [
+                    "ds_sheet" => [
+                        "label"     => "DS Sheet",
+                        "headers_to_db" => [
+                            'Order#'            => 'order_num',
+                            'Reason'            => 'reason',
+                            'Status'            => 'status',
+                        ],
+                    ],
+                ],
+            
+            ],
+
+        'gifts' => [
+            "label"             => "Import Gifts",
+            "permission_required" => "import-gifts",
             "files"             => [
                 "ds_sheet" => [
                     "label"     => "DS Sheet",
                     "headers_to_db" => [
-                        'Order#'            => 'order_num',
-                        'Reason'            => 'reason',
-                        'Status'            => 'status',
+                        'Product name'            => 'product_name',
+                        'Message'            => 'message',
+                        'Delivery Address'            => 'delivery',
                     ],
                 ],
             ],
         
         ],
-
-        // 'gifts' => [
-        //     "label"             => "Import Gifts",
-        //     "permission_required" => "import-gifts",
-        //     "files"             => [
-        //         "ds_sheet" => [
-        //             "label"     => "DS Sheet",
-        //             "headers_to_db" => [
-        //                 'Product name'            => 'product_name',
-        //                 'Message'            => 'message',
-        //                 'Delivery Address'            => 'delivery',
-        //             ],
-        //         ],
-        //     ],
-        
-        // ],
         
     ],
     ];

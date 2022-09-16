@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRefundsTable extends Migration
+class CreateGiftsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateRefundsTable extends Migration
      */
     public function up()
     {
-        Schema::create('refunds', function (Blueprint $table) {
+        Schema::create('gifts', function (Blueprint $table) {
             $table->id();
-            $table->string('order_num');
-            $table->string('reason');
-            $table->string('status');
+            $table->string('product_name');
+            $table->string('message');
+            $table->string('delivery');
+            
         });
     }
 
@@ -28,6 +29,6 @@ class CreateRefundsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('refunds');
+        Schema::dropIfExists('gifts');
     }
 }

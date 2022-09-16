@@ -38,6 +38,11 @@ for($i=0;$i<$keys_amount;$i++)
 // get table header data
 $headers = $data[$data_key][2];
 
+// model name to be sent for dynamic model class
+$model = $data[$data_key][1];
+$model = explode('-',$model);
+$model = $model[1];
+
 ?>
 
 
@@ -46,9 +51,22 @@ $headers = $data[$data_key][2];
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Page Header
+      {{ $data[$data_key][0] }}
       <small>Delete or Export Data</small>
     </h1>
+    @if (Session::has('success'))
+    <div class="alert alert-success">
+        <ul>
+            <li>{!! \Session::get('success') !!}</li>
+        </ul>
+    </div>
+@elseif (Session::has('error'))
+    <div class="alert alert-danger">
+      <ul>
+          <li>{!! \Session::get('error') !!}</li>
+      </ul>
+    </div>
+@endif
   </section>
  
   <!-- Main content -->
@@ -84,7 +102,7 @@ $headers = $data[$data_key][2];
           
               @if(Str::contains($user_perms,$permission_names[$data_key]))
                 <td class="dnr">
-                  <form style="display:inline;" method="POST" class="fm-inline" action="">
+                  <form style="display:inline;" method="POST" class="fm-inline" action="{{ route('data.destroy', ['data' => $data_table->id, 'model' => $model])  }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this row ?')" style="background-color: transparent;background-repeat: no-repeat;border: none;cursor: pointer;overflow: hidden;outline: none;">

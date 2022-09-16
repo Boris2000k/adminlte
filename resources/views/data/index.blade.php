@@ -162,7 +162,9 @@ $( document ).ready(function() {
     // get array index of current data
     headerData = '';
     // get data index from value
+    
     var dataIndex = $("#importType").val().split('-')[0];
+    
     
     $("#headers_input").val($("#importType").val().split('-')[1]+'-'+$("#importType").val().split('-')[2]);
 
@@ -175,7 +177,7 @@ $( document ).ready(function() {
     // select headers
     $.each(data[dataIndex][2], function(key, value) {
     
-    headerData+= value+','});
+    headerData+= key+','});
     // cut comma from last header
     headerData = headerData.slice(0,-1);
     // set the headers text
